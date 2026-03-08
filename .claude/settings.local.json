@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npx create-vite@latest:*)",
+      "Read(//c/Users/ramzi/Desktop/devs/**)",
+      "Bash(npx --yes create-vite@latest apsi-temp --template react-ts)",
+      "Bash(cp:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(xargs grep:*)",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(echo === FILE $fid ===:*)",
+      "Bash(echo === $fid ===:*)"
+    ]
+  }
+}
