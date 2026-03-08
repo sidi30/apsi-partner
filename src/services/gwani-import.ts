@@ -3,7 +3,7 @@ import type { Member, Partner, Project, Convention } from "@/data/types";
 
 const STORAGE_KEY = "apsi_gwani_imported";
 const STORAGE_VERSION_KEY = "apsi_gwani_version";
-const CURRENT_VERSION = "3"; // bump to force re-import
+const CURRENT_VERSION = "6"; // bump to force re-import
 
 /** True if we already ran the import in this browser. */
 export function alreadyImported(): boolean {
@@ -94,38 +94,101 @@ function nameExists(list: { nom: string }[], nom: string): boolean {
 }
 
 // ── Known members (verified from Gwani RAG + CR meeting minutes) ───
-// Founding members from AGC 06/10/2024
-const FOUNDERS: Array<{ nom: string; bio: string; competences: string[] }> = [
-  { nom: "Aboubacar YACOUBA MAI BIRNI", bio: "Président APSI-NE. Ingénieur cybersécurité.", competences: ["Gouvernance", "Gestion des risques"] },
-  { nom: "Abdoul-Razak OUMAROU MAKAMA", bio: "Ingénieur réseaux et télécoms.", competences: ["Architecture réseau"] },
-  { nom: "DJIBO ISSA Yahaya", bio: "Ingénieur cybersécurité.", competences: ["Pentest", "SOC/SIEM"] },
-  { nom: "Yacoubou ATTO Housseini", bio: "Ingénieur sécurité des systèmes d'information.", competences: ["ISO 27001", "Gouvernance"] },
-  { nom: "ABDRAMANE CISSÉ Ousseini", bio: "Ingénieur sécurité des systèmes d'information.", competences: ["ISO 27001"] },
-  { nom: "Maliki Harouna Assad", bio: "Ingénieur sécurité des systèmes d'information.", competences: ["ISO 27001", "Gestion des risques"] },
-  { nom: "CHAIBOU ABDOU Abdoul Latif", bio: "Ingénieur sécurité des systèmes d'information.", competences: ["ISO 27001"] },
-  { nom: "Mamadou Coulibaly Boubacar", bio: "Ingénieur d'affaires.", competences: ["Gestion des risques", "Gouvernance"] },
-  { nom: "IBRAHIM LY SOULEYMANE Ibrahim", bio: "Ingénieur cybersécurité.", competences: ["Pentest", "Gouvernance"] },
-  { nom: "Abdoulkassoum Mahaman Laouan Djibril", bio: "Ingénieur sécurité des systèmes d'information.", competences: ["ISO 27001"] },
-  { nom: "ABOUBACAR AMADOU Abdoul Djafar", bio: "Responsable Commission R&D. Ingénieur sécurité des systèmes d'information.", competences: ["ISO 27001", "OSINT", "Dev sécurisé"] },
-];
 
-// Active members extracted from CR meeting minutes + Gwani chat enrichment
-const ACTIVE_MEMBERS: Array<{ nom: string; bio: string; competences: string[]; niveau: string }> = [
-  { nom: "Abdoul Karim", bio: "Digital Project Manager. Chef du Département Homologation ARCEP Niger. Responsable groupe de travail CyberNiger 2025.", competences: ["Gouvernance", "Gestion des risques"], niveau: "Senior" },
-  { nom: "Marah Galy Adam", bio: "Responsable Commission CSEN (Sensibilisation et Éducation Numérique).", competences: ["Formation", "Gouvernance"], niveau: "Senior" },
-  { nom: "Ramzi SIDI IBRAHIM", bio: "Responsable Commission CPRI (Partenariats & Rayonnement Institutionnel).", competences: ["Gouvernance", "Gestion des risques"], niveau: "Senior" },
-  { nom: "Magassouba Sory Oulen", bio: "Responsable Commission CIATN (Insertion et Accompagnement des Talents Numériques).", competences: ["Formation", "Gouvernance"], niveau: "Senior" },
-  { nom: "Hafiz Mahaman Sanoussi", bio: "Membre actif APSI-NE.", competences: ["Gouvernance"], niveau: "Confirmé" },
-  { nom: "Abdourahamane Noury", bio: "Membre actif APSI-NE.", competences: ["Gouvernance"], niveau: "Confirmé" },
-  { nom: "Fadima", bio: "Membre actif APSI-NE. Impliquée dans les dossiers FORCYN.", competences: ["Gouvernance"], niveau: "Confirmé" },
-  { nom: "Hacksparo", bio: "Membre actif APSI-NE.", competences: ["Pentest", "OSINT"], niveau: "Confirmé" },
-  { nom: "Maman Rabiou", bio: "Membre actif APSI-NE.", competences: ["Gouvernance"], niveau: "Confirmé" },
-  { nom: "Mahamadou Soumaila", bio: "Membre actif APSI-NE.", competences: ["Gouvernance"], niveau: "Confirmé" },
-  { nom: "Yacine", bio: "Nouveau membre actif APSI-NE (depuis mai 2025).", competences: [], niveau: "Junior" },
-  { nom: "Rahmata", bio: "Membre actif APSI-NE. Impliquée dans les dossiers FORCYN.", competences: ["Gouvernance"], niveau: "Confirmé" },
-  { nom: "Kalilou", bio: "Membre actif APSI-NE. Volontaire formateur (légal, compliance, cryptographie).", competences: ["Formation"], niveau: "Confirmé" },
-  { nom: "Issaka", bio: "Membre actif APSI-NE.", competences: [], niveau: "Junior" },
-  { nom: "Aboubakar Oumar", bio: "Membre actif APSI-NE.", competences: [], niveau: "Confirmé" },
+interface KnownMember {
+  nom: string;
+  role: "Membre fondateur" | "Membre actif" | "Membre d'honneur";
+  bio: string;
+  competences: string[];
+  niveau: string;
+  commission?: string; // Commission badge
+}
+
+const KNOWN_MEMBERS: KnownMember[] = [
+  // ── Fondateurs (AGC 06/10/2024) ──
+  { nom: "Aboubacar YACOUBA MAI BIRNI", role: "Membre fondateur", niveau: "Expert",
+    bio: "Président APSI-NE. Consultant cybersécurité, Resp. ISAC/CSIRT & Cyber Capacity Building à l'ACRC. Ex-Mazars Sénégal. Audit IT/SI, tests d'intrusion, GRC, formation et stratégie cybersécurité.",
+    competences: ["Pentest", "Gouvernance", "Gestion des risques", "Formation"] },
+  { nom: "Abdoul-Razak OUMAROU MAKAMA", role: "Membre fondateur", niveau: "Senior",
+    bio: "Responsable Commission Marketing et Communication. Ingénieur réseaux et télécoms. Animateur AG constitutive.",
+    competences: ["Architecture réseau"], commission: "Marketing & Com" },
+  { nom: "Yahaya DJIBO ISSA", role: "Membre fondateur", niveau: "Senior",
+    bio: "Ingénieur Systèmes, Réseaux & Cybersécurité chez LDC Groupe. Cybersécurité offensive et défensive. Ex-BECYCURE, Groupe AYOR, Orange Niger, BAGRI.",
+    competences: ["Pentest", "SOC/SIEM", "Architecture réseau", "Incident Response"] },
+  { nom: "Yacoubou ATTO Housseini", role: "Membre fondateur", niveau: "Senior",
+    bio: "Ingénieur Réseau & Sécurité, Resp. équipe Support IT chez INQ DIGITAL CI. Politiques de sécurité, surveillance incidents, formation/sensibilisation.",
+    competences: ["Architecture réseau", "Incident Response", "Formation", "Gouvernance"] },
+  { nom: "ABDRAMANE CISSÉ Ousseini", role: "Membre fondateur", niveau: "Senior",
+    bio: "Ingénieur sécurité des systèmes d'information.",
+    competences: ["ISO 27001"] },
+  { nom: "Maliki Harouna Assad", role: "Membre fondateur", niveau: "Senior",
+    bio: "1er Vice-Président APSI-NE. Ingénieur systèmes & dev full-stack Python chez SIME Informatique. Admin Linux, sécurité & cryptographie, CTF. Ex-American Tower Africa, Orozen.",
+    competences: ["Dev sécurisé", "ISO 27001", "Pentest", "Architecture réseau"] },
+  { nom: "CHAIBOU ABDOU Abdoul Latif", role: "Membre fondateur", niveau: "Senior",
+    bio: "Ingénieur sécurité des systèmes d'information.",
+    competences: ["ISO 27001"] },
+  { nom: "Mamadou Coulibaly Boubacar", role: "Membre fondateur", niveau: "Senior",
+    bio: "Ingénieur d'affaires.",
+    competences: ["Gestion des risques", "Gouvernance"] },
+  { nom: "IBRAHIM LY SOULEYMANE Ibrahim", role: "Membre fondateur", niveau: "Senior",
+    bio: "Ingénieur cybersécurité.",
+    competences: ["Pentest", "Gouvernance"] },
+  { nom: "Abdoulkassoum Mahaman Laouan Djibril", role: "Membre fondateur", niveau: "Senior",
+    bio: "Ingénieur sécurité des systèmes d'information.",
+    competences: ["ISO 27001"] },
+  { nom: "ABOUBACAR AMADOU Abdoul Djafar", role: "Membre fondateur", niveau: "Senior",
+    bio: "Responsable Commission R&D. Ingénieur sécurité des systèmes d'information. Modérateur Masterclass Space sur X.",
+    competences: ["ISO 27001", "OSINT", "Dev sécurisé"], commission: "R&D" },
+
+  // ── Membres actifs (enrichis depuis Gwani + CR) ──
+  { nom: "Abdoul Karim", role: "Membre actif", niveau: "Expert",
+    bio: "Chef Département Homologation ARCEP Niger. 14 ans d'expérience télécoms & régulation. Master Gestion Politiques Cybersécurité. Expert ingénierie cybersécurité. Responsable groupe CyberNiger 2025.",
+    competences: ["Gouvernance", "Architecture réseau", "Gestion des risques", "ISO 27001"] },
+  { nom: "Marah Galy Adam", role: "Membre actif", niveau: "Expert",
+    bio: "Responsable Commission CSEN. Security Architect à la Banque Mondiale. Master Cryptologie (Univ. Limoges). Ex-Société Générale CIB, Deloitte, Airbus Red Team. 1er prix DGSE Tracs 2019, 1er STHack CTF 2019. Créateur VulnHub Wakanda.",
+    competences: ["Pentest", "Cloud Security", "Gestion des risques", "Formation", "Dev sécurisé"], commission: "CSEN" },
+  { nom: "Ramzi SIDI IBRAHIM", role: "Membre actif", niveau: "Senior",
+    bio: "Responsable Commission CPRI. Lead Software Developer spécialisé Java, Angular et DevSecOps. Expert développement sécurisé et audits de sécurité applicative.",
+    competences: ["DevSecOps", "Dev sécurisé", "Gouvernance"], commission: "CPRI" },
+  { nom: "Magassouba Sory Oulen", role: "Membre actif", niveau: "Senior",
+    bio: "Responsable Commission CIATN (Insertion et Accompagnement des Talents Numériques). Présentation du programme aux nouveaux membres.",
+    competences: ["Formation", "Gouvernance"], commission: "CIATN" },
+  { nom: "Maliki Soumana Hamidou", role: "Membre actif", niveau: "Expert",
+    bio: "Ingénieur consultant senior cybersécurité, expert IAM/IGA/PKI et sécurité Cloud. Certifié VENAFI. Ex-Clay Group, Beneva, Capgemini, BNP Paribas, Business & Decision. AWS, Azure, Terraform, DevSecOps.",
+    competences: ["Cloud Security", "DevSecOps", "ISO 27001", "Gouvernance"] },
+  { nom: "Hafiz Mahaman Sanoussi", role: "Membre actif", niveau: "Confirmé",
+    bio: "Administrateur Réseau chez SIME Informatique. Ex-Orange Burkina Faso, ANPTIC. Spécialiste infrastructure IT, fibre optique, gestion sites web.",
+    competences: ["Architecture réseau"] },
+  { nom: "Abdourahamane Noury", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE. Participe aux réunions hebdomadaires.",
+    competences: ["Gouvernance"] },
+  { nom: "Fadima", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE. Impliquée dans les dossiers FORCYN et le traitement documentaire.",
+    competences: ["Gouvernance"] },
+  { nom: "Hacksparo", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE.",
+    competences: ["Pentest", "OSINT"] },
+  { nom: "Maman Rabiou", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE. Participe aux réunions hebdomadaires.",
+    competences: ["Gouvernance"] },
+  { nom: "Mahamadou Soumaila", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE. Volontaire formateur.",
+    competences: ["Formation"] },
+  { nom: "Yacine", role: "Membre actif", niveau: "Junior",
+    bio: "Nouveau membre actif APSI-NE (depuis mai 2025). A présenté Hakim comme second nouveau membre.",
+    competences: [] },
+  { nom: "Rahmata", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE. Impliquée dans les dossiers FORCYN.",
+    competences: ["Gouvernance"] },
+  { nom: "Kalilou", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE. Volontaire formateur (légal, compliance, cryptographie).",
+    competences: ["Formation"] },
+  { nom: "Issaka", role: "Membre actif", niveau: "Junior",
+    bio: "Membre actif APSI-NE.",
+    competences: [] },
+  { nom: "Aboubakar Oumar", role: "Membre actif", niveau: "Confirmé",
+    bio: "Membre actif APSI-NE.",
+    competences: [] },
 ];
 
 // ── Import members from CR meeting minutes ─────────────────────────
@@ -133,42 +196,52 @@ const ACTIVE_MEMBERS: Array<{ nom: string; bio: string; competences: string[]; n
 export async function importMembers(existing: Member[]): Promise<Member[]> {
   const merged = [...existing];
 
-  // Helper: check if a member already exists by partial name match
-  const alreadyExists = (nom: string) => {
-    if (nameExists(merged, nom)) return true;
-    const parts = nom.split(/\s+/);
-    return merged.some((m) =>
-      parts.some((p) => p.length > 3 && m.nom.toLowerCase().includes(p.toLowerCase()))
-    );
+  // Known aliases: short CR names → parts of full KNOWN_MEMBERS names
+  const ALIASES: Record<string, string> = {
+    "maibirni": "mai birni", "razak makama": "oumarou makama",
+    "abdoul razak": "oumarou makama", "atto housseini": "atto",
+    "abdoul djafar": "amadou abdoul djafar", "djafar": "amadou abdoul djafar",
+    "abdoul latif": "chaibou abdou", "assad": "maliki harouna assad",
+    "maliki": "maliki harouna", "magass": "magassouba",
+    "noury abdourahamane": "abdourahamane noury", "abdourahamane": "abdourahamane noury",
+    "mamane rabiou": "maman rabiou", "mahamadou": "mahamadou soumaila",
+    "aboubakar": "aboubakar oumar", "marah": "marah galy", "ramzi": "ramzi sidi",
+    "hafiz": "hafiz mahaman", "atto": "atto housseini",
+    "yahaya": "djibo issa yahaya",
   };
 
-  // 1) Add founding members
-  for (const f of FOUNDERS) {
-    if (alreadyExists(f.nom)) continue;
-    merged.push({
-      id: nextId(merged),
-      nom: f.nom,
-      role: "Membre fondateur",
-      email: "",
-      competences: f.competences,
-      niveau: "Senior",
-      bio: f.bio,
-      disponible: true,
+  // Helper: check if a member already exists
+  const alreadyExists = (nom: string) => {
+    if (nameExists(merged, nom)) return true;
+    const nl = nom.toLowerCase().trim();
+    // Check aliases
+    const alias = ALIASES[nl];
+    if (alias && merged.some((m) => m.nom.toLowerCase().includes(alias))) return true;
+    // Check: at least 2 name parts (>3 chars) must match the same existing member
+    const parts = nl.split(/\s+/).filter((p) => p.length > 3);
+    if (parts.length === 0) return false;
+    // For single-word names, require exact match only
+    if (parts.length === 1) return false;
+    return merged.some((m) => {
+      const ml = m.nom.toLowerCase();
+      const matchCount = parts.filter((p) => ml.includes(p)).length;
+      return matchCount >= 2;
     });
-  }
+  };
 
-  // 2) Add known active members (enriched from Gwani chat + CR parsing)
-  for (const am of ACTIVE_MEMBERS) {
-    if (alreadyExists(am.nom)) continue;
+  // 1) Add all known members (founders + active)
+  for (const km of KNOWN_MEMBERS) {
+    if (alreadyExists(km.nom)) continue;
     merged.push({
       id: nextId(merged),
-      nom: am.nom,
-      role: "Membre actif",
+      nom: km.nom,
+      role: km.role,
       email: "",
-      competences: am.competences,
-      niveau: am.niveau,
-      bio: am.bio,
+      competences: km.competences,
+      niveau: km.niveau,
+      bio: km.bio,
       disponible: true,
+      commission: km.commission,
     });
   }
 

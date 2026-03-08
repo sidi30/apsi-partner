@@ -5,6 +5,7 @@ import {
   FolderKanban,
   FileText,
   Palette,
+  Award,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { config } from "@/lib/config";
@@ -14,6 +15,7 @@ const NAV = [
   { key: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { key: "crm", icon: UserCheck, label: "Partenaires" },
   { key: "members", icon: Users, label: "Membres" },
+  { key: "honorary", icon: Award, label: "Membres d'honneur" },
   { key: "projects", icon: FolderKanban, label: "Projets" },
   { key: "conventions", icon: FileText, label: "Conventions" },
 ] as const;

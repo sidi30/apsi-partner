@@ -21,6 +21,11 @@ export interface Member {
   niveau: string;
   bio: string;
   disponible: boolean;
+  commission?: string;
+  photo?: string;
+  trigramme?: string;
+  linkedin?: string;
+  cv?: string;
 }
 
 export interface Project {

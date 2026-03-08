@@ -43,7 +43,6 @@ export function useGwaniImport(
 
   useEffect(() => {
     if (ranRef.current) return;
-    if (!config.gwaniUrl || !config.gwaniKey) return;
     if (alreadyImported()) return;
 
     ranRef.current = true;

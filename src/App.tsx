@@ -8,6 +8,7 @@ import { Sidebar, type TabKey } from "@/components/sidebar";
 import { Dashboard } from "@/views/dashboard";
 import { CRMView } from "@/views/crm";
 import { MembersView } from "@/views/members";
+import { HonoraryView } from "@/views/honorary";
 import { ProjectsView } from "@/views/projects";
 import { ConventionsView } from "@/views/conventions";
 
@@ -27,10 +28,15 @@ export default function App() {
     conventions, setConventions,
   );
 
+  const activeMembers = members.filter((m) => m.role !== "Membre d'honneur");
+  const honoraryMembers = members.filter((m) => m.role === "Membre d'honneur");
+
   const counts: Partial<Record<TabKey, number>> = {
-    crm: partners.filter((p) => p.statut === "nego").length,
-    projects: projects.filter((p) => p.statut === "En cours").length,
-    conventions: conventions.filter((c) => c.statut !== "signe").length,
+    crm: partners.length,
+    members: activeMembers.length,
+    honorary: honoraryMembers.length,
+    projects: projects.length,
+    conventions: conventions.length,
   };
 
   return (
@@ -83,7 +89,10 @@ export default function App() {
           <CRMView partners={partners} setPartners={setPartners} />
         )}
         {tab === "members" && (
-          <MembersView members={members} setMembers={setMembers} />
+          <MembersView members={activeMembers} setMembers={setMembers} allMembers={members} />
+        )}
+        {tab === "honorary" && (
+          <HonoraryView members={honoraryMembers} setMembers={setMembers} allMembers={members} />
         )}
         {tab === "projects" && (
           <ProjectsView projects={projects} setProjects={setProjects} members={members} partners={partners} />
