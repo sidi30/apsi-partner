@@ -71,17 +71,17 @@ interface ThemeCtx {
 }
 
 const ThemeContext = createContext<ThemeCtx>({
-  theme: "dark",
-  colors: THEMES.dark,
+  theme: "light",
+  colors: THEMES.light,
   setTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeKey>(() => {
     try {
-      return (localStorage.getItem("apsi_theme") as ThemeKey) || "dark";
+      return (localStorage.getItem("apsi_theme") as ThemeKey) || "light";
     } catch {
-      return "dark";
+      return "light";
     }
   });
 

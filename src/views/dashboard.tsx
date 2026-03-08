@@ -48,7 +48,7 @@ export function Dashboard({ partners, members, projects, conventions }: Dashboar
         </button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
+      <div className="grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
         {stats.map((s) => (
           <div key={s.label} style={{ background: colors.card, border: `1px solid ${colors.border}`, borderRadius: "12px", padding: "16px 18px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
@@ -63,7 +63,7 @@ export function Dashboard({ partners, members, projects, conventions }: Dashboar
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+      <div className="grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
         <div style={{ background: colors.card, border: `1px solid ${colors.border}`, borderRadius: "12px", padding: "16px 18px" }}>
           <div style={{ color: colors.muted, fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "12px" }}>Pipeline partenaires</div>
           {pipeline.map((s) => (

@@ -3,7 +3,7 @@ import type { Member, Partner, Project, Convention } from "@/data/types";
 
 const STORAGE_KEY = "apsi_gwani_imported";
 const STORAGE_VERSION_KEY = "apsi_gwani_version";
-const CURRENT_VERSION = "6"; // bump to force re-import
+const CURRENT_VERSION = "8"; // bump to force re-import
 
 /** True if we already ran the import in this browser. */
 export function alreadyImported(): boolean {
@@ -108,7 +108,7 @@ const KNOWN_MEMBERS: KnownMember[] = [
   // ── Fondateurs (AGC 06/10/2024) ──
   { nom: "Aboubacar YACOUBA MAI BIRNI", role: "Membre fondateur", niveau: "Expert",
     bio: "Président APSI-NE. Consultant cybersécurité, Resp. ISAC/CSIRT & Cyber Capacity Building à l'ACRC. Ex-Mazars Sénégal. Audit IT/SI, tests d'intrusion, GRC, formation et stratégie cybersécurité.",
-    competences: ["Pentest", "Gouvernance", "Gestion des risques", "Formation"] },
+    competences: ["Pentest", "Gouvernance", "Gestion des risques", "Formation"], commission: "Présidence" },
   { nom: "Abdoul-Razak OUMAROU MAKAMA", role: "Membre fondateur", niveau: "Senior",
     bio: "Responsable Commission Marketing et Communication. Ingénieur réseaux et télécoms. Animateur AG constitutive.",
     competences: ["Architecture réseau"], commission: "Marketing & Com" },
@@ -123,7 +123,7 @@ const KNOWN_MEMBERS: KnownMember[] = [
     competences: ["ISO 27001"] },
   { nom: "Maliki Harouna Assad", role: "Membre fondateur", niveau: "Senior",
     bio: "1er Vice-Président APSI-NE. Ingénieur systèmes & dev full-stack Python chez SIME Informatique. Admin Linux, sécurité & cryptographie, CTF. Ex-American Tower Africa, Orozen.",
-    competences: ["Dev sécurisé", "ISO 27001", "Pentest", "Architecture réseau"] },
+    competences: ["Dev sécurisé", "ISO 27001", "Pentest", "Architecture réseau"], commission: "Vice-Présidence" },
   { nom: "CHAIBOU ABDOU Abdoul Latif", role: "Membre fondateur", niveau: "Senior",
     bio: "Ingénieur sécurité des systèmes d'information.",
     competences: ["ISO 27001"] },
@@ -143,7 +143,7 @@ const KNOWN_MEMBERS: KnownMember[] = [
   // ── Membres actifs (enrichis depuis Gwani + CR) ──
   { nom: "Abdoul Karim", role: "Membre actif", niveau: "Expert",
     bio: "Chef Département Homologation ARCEP Niger. 14 ans d'expérience télécoms & régulation. Master Gestion Politiques Cybersécurité. Expert ingénierie cybersécurité. Responsable groupe CyberNiger 2025.",
-    competences: ["Gouvernance", "Architecture réseau", "Gestion des risques", "ISO 27001"] },
+    competences: ["Gouvernance", "Architecture réseau", "Gestion des risques", "ISO 27001"], commission: "CyberNiger 2025" },
   { nom: "Marah Galy Adam", role: "Membre actif", niveau: "Expert",
     bio: "Responsable Commission CSEN. Security Architect à la Banque Mondiale. Master Cryptologie (Univ. Limoges). Ex-Société Générale CIB, Deloitte, Airbus Red Team. 1er prix DGSE Tracs 2019, 1er STHack CTF 2019. Créateur VulnHub Wakanda.",
     competences: ["Pentest", "Cloud Security", "Gestion des risques", "Formation", "Dev sécurisé"], commission: "CSEN" },
@@ -189,6 +189,14 @@ const KNOWN_MEMBERS: KnownMember[] = [
   { nom: "Aboubakar Oumar", role: "Membre actif", niveau: "Confirmé",
     bio: "Membre actif APSI-NE.",
     competences: [] },
+
+  // ── Membres d'honneur (vérifiés via Gwani) ──
+  { nom: "Mamane Lawal WADATAOU", role: "Membre d'honneur", niveau: "Expert",
+    bio: "Directeur du Système d'Information, Banque de l'Habitat du Niger (BHN). Invité membre d'honneur APSI-NE (février 2025).",
+    competences: ["Gouvernance", "Gestion des risques", "ISO 27001"] },
+  { nom: "Savadogo Yassia", role: "Membre d'honneur", niveau: "Expert",
+    bio: "Chief Information Officer. Invité membre d'honneur APSI-NE (janvier 2025).",
+    competences: ["Gouvernance", "Gestion des risques"] },
 ];
 
 // ── Import members from CR meeting minutes ─────────────────────────

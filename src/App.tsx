@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useTheme } from "@/hooks/use-theme";
 import { useGwaniImport } from "@/hooks/use-gwani-import";
@@ -14,7 +14,21 @@ import { ConventionsView } from "@/views/conventions";
 
 export default function App() {
   const { colors } = useTheme();
-  const [tab, setTab] = useState<TabKey>("dashboard");
+  const validTabs: TabKey[] = ["dashboard", "crm", "members", "honorary", "projects", "conventions"];
+  const getTabFromHash = (): TabKey => {
+    const hash = window.location.hash.replace("#", "");
+    return validTabs.includes(hash as TabKey) ? (hash as TabKey) : "dashboard";
+  };
+  const [tab, setTabState] = useState<TabKey>(getTabFromHash);
+  const setTab = useCallback((t: TabKey) => {
+    setTabState(t);
+    window.location.hash = t;
+  }, []);
+  useEffect(() => {
+    const onHash = () => setTabState(getTabFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
   const [partners, setPartners] = useLocalStorage<Partner[]>("apsi_partners", SEED_PARTNERS);
   const [members, setMembers] = useLocalStorage<Member[]>("apsi_members", SEED_MEMBERS);
   const [projects, setProjects] = useLocalStorage<Project[]>("apsi_projects", SEED_PROJECTS);
@@ -50,8 +64,8 @@ export default function App() {
         overflow: "hidden",
       }}
     >
-      <Sidebar active={tab} setActive={setTab} counts={counts} />
-      <main style={{ flex: 1, overflowY: "auto", padding: "28px 32px" }}>
+      <div className="sidebar-desktop"><Sidebar active={tab} setActive={setTab} counts={counts} /></div>
+      <main className="main-content" style={{ flex: 1, overflowY: "auto", padding: "28px 32px" }}>
         {gwaniImport.loading && (
           <div style={{
             background: colors.surface,
@@ -101,6 +115,35 @@ export default function App() {
           <ConventionsView conventions={conventions} setConventions={setConventions} />
         )}
       </main>
+      {/* Mobile bottom nav */}
+      <nav className="mobile-nav" style={{
+        position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
+        background: colors.surface, borderTop: `1px solid ${colors.border}`,
+        display: "none", justifyContent: "space-around", padding: "6px 0 env(safe-area-inset-bottom, 6px)",
+      }}>
+        {[
+          { key: "dashboard" as TabKey, label: "Accueil" },
+          { key: "crm" as TabKey, label: "CRM" },
+          { key: "members" as TabKey, label: "Membres" },
+          { key: "honorary" as TabKey, label: "Honneur" },
+          { key: "projects" as TabKey, label: "Projets" },
+          { key: "conventions" as TabKey, label: "Conv." },
+        ].map((n) => (
+          <button key={n.key} onClick={() => setTab(n.key)}
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: tab === n.key ? colors.accent : colors.muted,
+              fontSize: "0.6rem", fontWeight: tab === n.key ? 700 : 500,
+              fontFamily: "inherit", display: "flex", flexDirection: "column",
+              alignItems: "center", gap: "2px", padding: "4px 8px",
+            }}>
+            <span style={{ fontSize: "0.7rem" }}>{n.label}</span>
+            {(counts?.[n.key] ?? 0) > 0 && (
+              <span style={{ fontSize: "0.55rem", color: colors.accent }}>{counts[n.key]}</span>
+            )}
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }

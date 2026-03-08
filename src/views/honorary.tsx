@@ -30,6 +30,12 @@ export function HonoraryView({ members, setMembers, allMembers }: HonoraryViewPr
   const { colors } = useTheme();
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState({ nom: "", bio: "", email: "" });
+  const [search, setSearch] = useState("");
+
+  const filteredMembers = members.filter((m) => {
+    const q = search.toLowerCase();
+    return !q || m.nom.toLowerCase().includes(q) || (m.bio || "").toLowerCase().includes(q);
+  });
 
   const save = () => {
     if (!form.nom) return;
@@ -59,8 +65,13 @@ export function HonoraryView({ members, setMembers, allMembers }: HonoraryViewPr
         <Button onClick={() => { setModal(true); setForm({ nom: "", bio: "", email: "" }); }}>+ Ajouter</Button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-        {members.map((m) => (
+      <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
+        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher..."
+          style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
+      </div>
+
+      <div className="grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+        {filteredMembers.map((m) => (
           <div key={m.id} style={{
             background: colors.card, border: `1px solid ${colors.border}`, borderRadius: "12px",
             padding: "16px", display: "flex", gap: "14px", alignItems: "flex-start",
@@ -91,7 +102,7 @@ export function HonoraryView({ members, setMembers, allMembers }: HonoraryViewPr
         ))}
       </div>
 
-      {members.length === 0 && (
+      {filteredMembers.length === 0 && (
         <div style={{ textAlign: "center", padding: "40px", color: colors.muted, fontSize: "0.85rem" }}>
           Aucun membre d'honneur pour le moment.
         </div>

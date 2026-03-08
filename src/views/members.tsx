@@ -50,6 +50,15 @@ export function MembersView({ members, setMembers, allMembers }: MembersViewProp
   const [form, setForm] = useState(emptyForm());
   const photoRef = useRef<HTMLInputElement>(null);
   const cvRef = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState("");
+  const [availFilter, setAvailFilter] = useState<"all" | "dispo" | "occupe">("all");
+
+  const filteredMembers = members.filter((m) => {
+    if (availFilter === "dispo" && !m.disponible) return false;
+    if (availFilter === "occupe" && m.disponible) return false;
+    const q = search.toLowerCase();
+    return !q || m.nom.toLowerCase().includes(q) || (m.competences || []).some(c => c.toLowerCase().includes(q)) || (m.commission || "").toLowerCase().includes(q);
+  });
 
   const save = () => {
     if (!form.nom) return;
@@ -90,14 +99,29 @@ export function MembersView({ members, setMembers, allMembers }: MembersViewProp
         <div>
           <h1 style={{ color: colors.text, fontSize: "1.5rem", fontWeight: 800 }}>Membres</h1>
           <p style={{ color: colors.muted, fontSize: "0.8rem", marginTop: "4px" }}>
-            {members.length} membres &middot; {members.filter((m) => m.disponible).length} disponibles
+            {search || availFilter !== "all" ? `${filteredMembers.length} / ` : ""}{members.length} membres &middot; {members.filter((m) => m.disponible).length} disponibles
           </p>
         </div>
         <Button onClick={() => { setModal(true); setEditId(null); setForm(emptyForm()); }}>+ Nouveau membre</Button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-        {members.map((m) => {
+      <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
+        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher nom, compétence..."
+          style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
+        {[
+          { key: "all" as const, label: "Tous", color: colors.muted },
+          { key: "dispo" as const, label: "Disponibles", color: colors.success },
+          { key: "occupe" as const, label: "Occupés", color: colors.warn },
+        ].map((s) => (
+          <button key={s.key} onClick={() => setAvailFilter(s.key)}
+            style={{ background: availFilter === s.key ? s.color + "20" : "transparent", color: availFilter === s.key ? s.color : colors.muted, border: `1px solid ${availFilter === s.key ? s.color + "50" : colors.border}`, borderRadius: "8px", padding: "5px 12px", fontSize: "0.72rem", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }}>
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+        {filteredMembers.map((m) => {
           const open = expanded === m.id;
           return (
             <div key={m.id} onClick={() => setExpanded(open ? null : m.id)}

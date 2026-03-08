@@ -46,3 +46,25 @@ select:focus {
     transform: rotate(360deg);
   }
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar-desktop {
+    display: none !important;
+  }
+  .mobile-nav {
+    display: flex !important;
+  }
+  .main-content {
+    padding: 16px !important;
+  }
+  .grid-2col {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-nav {
+    display: none !important;
+  }
+}

@@ -45,6 +45,7 @@ export function ProjectsView({ projects, setProjects, members, partners }: Proje
   const [form, setForm] = useState(emptyForm());
   const [viewFilter, setViewFilter] = useState<"all" | "apsi" | "partner">("all");
   const [partnerFilter, setPartnerFilter] = useState<number | "all">("all");
+  const [search, setSearch] = useState("");
 
   const filtered = projects.filter((p) => {
     if (viewFilter === "apsi") return !p.partenaireId;
@@ -54,6 +55,9 @@ export function ProjectsView({ projects, setProjects, members, partners }: Proje
       return true;
     }
     return true;
+  }).filter((p) => {
+    const q = search.toLowerCase();
+    return !q || p.titre.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.type.toLowerCase().includes(q);
   });
 
   const SCOL: Record<string, string> = {
@@ -77,12 +81,41 @@ export function ProjectsView({ projects, setProjects, members, partners }: Proje
 
   const getSuggestions = async (proj: Project) => {
     setAiState((a) => ({ ...a, [proj.id]: { loading: true, result: "" } }));
-    const memberList = members.map((m) =>
-      `- ${m.nom} (${m.role}, ${m.niveau}, ${m.disponible ? "disponible" : "non disponible"}) : ${(m.competences || []).join(", ")}`
+    const activeMembers = members.filter((m) => m.role !== "Membre d'honneur");
+    const honoraryMembers = members.filter((m) => m.role === "Membre d'honneur");
+    const activeMemberList = activeMembers.map((m) =>
+      `- ${m.nom} (${m.role}, ${m.niveau}, ${m.disponible ? "dispo" : "non dispo"}, compétences: ${(m.competences || []).join(", ") || "non renseignées"}${m.commission ? `, commission: ${m.commission}` : ""})`
+    ).join("\n");
+    const honoraryList = honoraryMembers.map((m) =>
+      `- ${m.nom} (Membre d'honneur, ${m.niveau}, compétences: ${(m.competences || []).join(", ") || "non renseignées"})`
     ).join("\n");
     const result = await callClaude([{
       role: "user",
-      content: `Projet ${config.orgName} :\nTitre : ${proj.titre}\nType : ${proj.type}\nDescription : ${proj.description}\nDeadline : ${proj.deadline || "Non définie"}\n\nVoici la liste EXACTE des membres de l'association ${config.orgName}. Tu DOIS choisir UNIQUEMENT parmi ces personnes :\n${memberList}\n\nSuggère :\n1. Le nombre de membres nécessaires\n2. Les membres les plus adaptés parmi la liste ci-dessus et pourquoi (utilise leurs vrais noms)\n3. Le rôle de chacun dans ce projet\n4. Un risque à anticiper\n\nIMPORTANT : Ne propose que des personnes de la liste ci-dessus. Sois précis et concis.`,
+      content: `Projet ${config.orgName} :
+Titre : ${proj.titre}
+Type : ${proj.type}
+Description : ${proj.description}
+Deadline : ${proj.deadline || "Non définie"}
+
+=== MEMBRES ACTIFS (à privilégier) ===
+${activeMemberList}
+
+=== MEMBRES D'HONNEUR (rôle consultatif uniquement) ===
+${honoraryList}
+
+CONSIGNES STRICTES :
+- Choisis UNIQUEMENT parmi les noms ci-dessus.
+- PRIVILÉGIE les membres actifs et fondateurs. Sélectionne ceux dont les compétences correspondent le mieux au type de projet et à sa description.
+- Tu peux proposer AU MAXIMUM 1 seul membre d'honneur, uniquement en rôle de conseiller/mentor. Les membres d'honneur ne doivent PAS avoir de rôle opérationnel.
+- Classe les membres suggérés par pertinence (compétences qui matchent le projet en premier).
+- Privilégie les membres disponibles.
+
+Réponds avec :
+1. Équipe recommandée (nombre de membres nécessaires)
+2. Pour chaque membre : son nom, pourquoi il est adapté (lien compétences/projet), et son rôle dans le projet
+3. Un risque à anticiper
+
+Sois précis et concis.`,
     }], { forceOpenAI: true });
     setAiState((a) => ({ ...a, [proj.id]: { loading: false, result } }));
   };
@@ -99,6 +132,8 @@ export function ProjectsView({ projects, setProjects, members, partners }: Proje
 
       {/* Filtres par type */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap", alignItems: "center" }}>
+        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher..."
+          style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
         {([
           { key: "all" as const, label: "Tous" },
           { key: "apsi" as const, label: `Projets internes ${config.orgName}` },
