@@ -15,7 +15,8 @@
       "Bash(python3:*)",
       "Bash(node:*)",
       "Bash(echo === FILE $fid ===:*)",
-      "Bash(echo === $fid ===:*)"
+      "Bash(echo === $fid ===:*)",
+      "WebSearch"
     ]
   }
 }

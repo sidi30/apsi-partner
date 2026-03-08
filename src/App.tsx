@@ -13,6 +13,7 @@ import { ProjectsView } from "@/views/projects";
 import { ConventionsView } from "@/views/conventions";
 import { ChatbotView } from "@/views/chatbot";
 import { CyberLabView } from "@/views/cyberlab";
+import { FloatingChat } from "@/components/floating-chat";
 
 export default function App() {
   const { colors } = useTheme();
@@ -123,6 +124,8 @@ export default function App() {
           <CyberLabView />
         )}
       </main>
+      {/* Floating Chat - available on all pages */}
+      <FloatingChat members={members} partners={partners} projects={projects} conventions={conventions} />
       {/* Mobile bottom nav */}
       <nav className="mobile-nav" style={{
         position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
