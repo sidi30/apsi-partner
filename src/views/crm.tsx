@@ -68,7 +68,7 @@ export function CRMView({ partners, setPartners }: CRMViewProps) {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
         <div>
           <h1 style={{ color: colors.text, fontSize: "1.5rem", fontWeight: 800 }}>Partenaires</h1>
           <p style={{ color: colors.muted, fontSize: "0.8rem", marginTop: "4px" }}>{partners.length} partenaires &middot; {partners.filter((p) => p.statut === "signe").length} signés</p>
@@ -76,7 +76,7 @@ export function CRMView({ partners, setPartners }: CRMViewProps) {
         <Button onClick={() => { setModal("form"); setEditId(null); setForm(emptyForm()); }}>+ Nouveau</Button>
       </div>
 
-      <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
+      <div className="filter-bar" style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
         <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher..."
           style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
         {[{ key: "all" as const, label: "Tous", color: colors.muted }, ...STATUTS].map((s) => (
@@ -91,7 +91,7 @@ export function CRMView({ partners, setPartners }: CRMViewProps) {
         {filtered.map((p) => {
           const st = STATUTS.find((s) => s.key === p.statut);
           return (
-            <div key={p.id} style={{ background: colors.card, border: `1px solid ${colors.border}`, borderRadius: "12px", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
+            <div key={p.id} className="card-row" style={{ background: colors.card, border: `1px solid ${colors.border}`, borderRadius: "12px", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
                   <span style={{ color: colors.text, fontWeight: 700, fontSize: "0.88rem" }}>{p.nom}</span>
@@ -101,7 +101,7 @@ export function CRMView({ partners, setPartners }: CRMViewProps) {
                 <div style={{ color: colors.muted, fontSize: "0.72rem", marginTop: "2px" }}>{p.secteur}{p.email ? ` · ${p.email}` : ""}</div>
                 {p.notes && <div style={{ color: colors.muted, fontSize: "0.7rem", marginTop: "4px", opacity: 0.8 }}>{p.notes}</div>}
               </div>
-              <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
+              <div className="card-actions" style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
                 <Button small variant="secondary" onClick={() => openEmail(p)}>Email IA</Button>
                 <Button small variant="ghost" onClick={() => openEdit(p)}>Modifier</Button>
                 <Button small variant="danger" onClick={() => setPartners(partners.filter((x) => x.id !== p.id))}>Suppr.</Button>
@@ -114,13 +114,13 @@ export function CRMView({ partners, setPartners }: CRMViewProps) {
       {modal === "form" && (
         <Modal title={editId ? "Modifier le partenaire" : "Nouveau partenaire"} onClose={() => { setModal(null); setEditId(null); }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <Field label="Nom complet" value={form.nom} onChange={(v) => setForm((f) => ({ ...f, nom: v }))} />
               <Field label="Organisation" value={form.org} onChange={(v) => setForm((f) => ({ ...f, org: v }))} />
               <Field label="Email" type="email" value={form.email} onChange={(v) => setForm((f) => ({ ...f, email: v }))} />
               <Field label="Téléphone" value={form.tel} onChange={(v) => setForm((f) => ({ ...f, tel: v }))} />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <SelectField label="Secteur" value={form.secteur} onChange={(v) => setForm((f) => ({ ...f, secteur: v }))} options={[...SECTEURS]} />
               <SelectField label="Statut" value={form.statut} onChange={(v) => setForm((f) => ({ ...f, statut: v as StatutKey }))} options={STATUTS.map((s) => ({ value: s.key, label: s.label }))} />
             </div>

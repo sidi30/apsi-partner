@@ -489,7 +489,7 @@ CONSIGNES DE RÉDACTION :
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
         <div>
           <h1 style={{ color: colors.text, fontSize: "1.5rem", fontWeight: 800 }}>Conventions</h1>
           <p style={{ color: colors.muted, fontSize: "0.8rem", marginTop: "4px" }}>{conventions.length} conventions &middot; {conventions.filter((c) => c.statut === "signe").length} signées</p>
@@ -497,7 +497,7 @@ CONSIGNES DE RÉDACTION :
         <Button onClick={() => { setModal("create"); setForm({ titre: "", partenaire: "", objet: "", duree: "1 an", contenu: "" }); }}>+ Nouvelle convention</Button>
       </div>
 
-      <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
+      <div className="filter-bar" style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
         <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher..."
           style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
         {[
@@ -526,7 +526,7 @@ CONSIGNES DE RÉDACTION :
           const st = CST[c.statut] || CST.brouillon;
           return (
             <div key={c.id} style={{ background: colors.card, border: `1px solid ${colors.border}`, borderRadius: "12px", padding: "14px 16px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div className="card-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
                     <span style={{ color: colors.text, fontWeight: 700 }}>{c.titre}</span>
@@ -536,7 +536,7 @@ CONSIGNES DE RÉDACTION :
                   <div style={{ color: colors.muted, fontSize: "0.72rem", marginTop: "2px" }}>Objet : {c.objet} &middot; Durée : {c.duree}</div>
                   <div style={{ color: colors.muted, fontSize: "0.68rem", marginTop: "3px" }}>Créée le {c.dateCreation}{c.dateSigne ? ` · Signée le ${c.dateSigne}` : ""}</div>
                 </div>
-                <div style={{ display: "flex", gap: "6px", marginLeft: "12px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                <div className="card-actions conv-actions" style={{ display: "flex", gap: "6px", marginLeft: "12px", flexWrap: "wrap", justifyContent: "flex-end" }}>
                   <Button small variant="secondary" onClick={() => { setTarget(c); setModal("preview"); }}>Voir</Button>
                   <Button small variant="secondary" onClick={() => downloadConventionPDF(c)}>PDF</Button>
                   <Button small variant="secondary" onClick={() => analyzeConvention(c)} loading={(aiState[c.id] || {}).loading}>Analyse IA</Button>
@@ -564,7 +564,7 @@ CONSIGNES DE RÉDACTION :
       {modal === "create" && (
         <Modal title="Nouvelle convention" onClose={() => setModal(null)} wide>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <Field label="Titre" value={form.titre} onChange={(v) => setForm((f) => ({ ...f, titre: v }))} placeholder={`Convention ${config.orgName} / ...`} />
               <Field label="Partenaire" value={form.partenaire} onChange={(v) => setForm((f) => ({ ...f, partenaire: v }))} placeholder="Nom de l'organisation" />
               <Field label="Objet du partenariat" value={form.objet} onChange={(v) => setForm((f) => ({ ...f, objet: v }))} placeholder="ex: Formation cybersécurité" />

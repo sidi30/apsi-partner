@@ -122,7 +122,7 @@ Sois précis et concis.`,
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
         <div>
           <h1 style={{ color: colors.text, fontSize: "1.5rem", fontWeight: 800 }}>Projets</h1>
           <p style={{ color: colors.muted, fontSize: "0.8rem", marginTop: "4px" }}>{projects.length} projets &middot; {projects.filter((p) => p.statut === "En cours").length} en cours</p>
@@ -131,7 +131,7 @@ Sois précis et concis.`,
       </div>
 
       {/* Filtres par type */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap", alignItems: "center" }}>
+      <div className="filter-bar" style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap", alignItems: "center" }}>
         <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher..."
           style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
         {([
@@ -163,9 +163,9 @@ Sois précis et concis.`,
           const linkedPartner = proj.partenaireId ? partners.find((p) => p.id === proj.partenaireId) : null;
           return (
             <div key={proj.id} style={{ background: colors.card, border: `1px solid ${colors.border}`, borderRadius: "12px", padding: "16px 18px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
+              <div className="card-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
+                  <div className="badge-row" style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px", flexWrap: "wrap" }}>
                     <span style={{ color: colors.text, fontWeight: 800, fontSize: "0.95rem" }}>{proj.titre}</span>
                     <Badge color={SCOL[proj.statut] || colors.muted}>{proj.statut}</Badge>
                     <Badge color={colors.muted}>{proj.type}</Badge>
@@ -185,7 +185,7 @@ Sois précis et concis.`,
                 </div>
               )}
 
-              <div style={{ display: "flex", gap: "6px" }}>
+              <div className="card-actions" style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                 <Button small variant="secondary" onClick={() => getSuggestions(proj)} loading={ai.loading}>Suggestions IA</Button>
                 <Button small variant="ghost" onClick={() => openEdit(proj)}>Modifier</Button>
                 <Button small variant="danger" onClick={() => setProjects(projects.filter((p) => p.id !== proj.id))}>Suppr.</Button>
@@ -210,11 +210,11 @@ Sois précis et concis.`,
       {modal && (
         <Modal title={editId ? "Modifier le projet" : "Nouveau projet"} onClose={() => { setModal(false); setEditId(null); }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <Field label="Titre" value={form.titre} onChange={(v) => setForm((f) => ({ ...f, titre: v }))} />
               <SelectField label="Type" value={form.type} onChange={(v) => setForm((f) => ({ ...f, type: v }))} options={[...TYPES_PROJET]} />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <SelectField label="Statut" value={form.statut} onChange={(v) => setForm((f) => ({ ...f, statut: v }))} options={[...STATUTS_PROJET]} />
               <Field label="Deadline" type="date" value={form.deadline} onChange={(v) => setForm((f) => ({ ...f, deadline: v }))} />
             </div>

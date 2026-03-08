@@ -24,6 +24,7 @@ export function Modal({ title, onClose, wide, children }: ModalProps) {
       }}
     >
       <div
+        className="modal-body"
         style={{
           background: colors.card,
           border: `1px solid ${colors.border}`,
@@ -63,6 +64,12 @@ export function Modal({ title, onClose, wide, children }: ModalProps) {
               cursor: "pointer",
               fontSize: "1.2rem",
               lineHeight: 1,
+              padding: "8px",
+              minWidth: "36px",
+              minHeight: "36px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             &#x2715;

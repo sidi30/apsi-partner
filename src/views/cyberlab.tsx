@@ -855,7 +855,7 @@ Le champ "correct" est l'index (0-3) de la bonne reponse dans le tableau "option
       </div>
 
       {/* ═══ SECTION NAV ═══ */}
-      <div className="flex gap-2 mb-6 mt-4 flex-wrap">
+      <div className="flex gap-2 mb-6 mt-4 flex-wrap cyberlab-tabs">
         {sectionNav.map((s, i) => {
           const Icon = s.icon;
           const isActive = section === s.key;
@@ -888,7 +888,7 @@ Le champ "correct" est l'index (0-3) de la bonne reponse dans le tableau "option
           <p className="text-sm mb-4" style={{ color: colors.muted, animation: "cl-fadeIn 0.5s ease" }}>
             Clique sur un domaine pour decouvrir ce qu'il fait, un exemple concret, et les competences cles.
           </p>
-          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
+          <div className="grid gap-3 cyberlab-domain-grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
             {DOMAINS.map((d, i) => {
               const Icon = d.icon;
               return (
@@ -974,7 +974,7 @@ Le champ "correct" est l'index (0-3) de la bonne reponse dans le tableau "option
               {domainTools.length > 0 && (
                 <div className="mb-4" style={{ animation: "cl-fadeInUp 0.4s ease 0.4s both" }}>
                   <h3 className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: colors.accent }}>Outils principaux</h3>
-                  <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))" }}>
+                  <div className="grid gap-2 cyberlab-stats-row" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))" }}>
                     {domainTools.map((t, i) => (
                       <div key={t.name} className="cl-card-hover flex items-center gap-2 text-xs p-2.5 rounded-lg" style={{
                         background: colors.surface, border: `1px solid ${colors.border}`,
@@ -1008,7 +1008,7 @@ Le champ "correct" est l'index (0-3) de la bonne reponse dans le tableau "option
           <p className="text-sm mb-4" style={{ color: colors.muted, animation: "cl-fadeIn 0.4s ease" }}>
             Choisis un domaine : l'IA genere 10 questions personnalisees du plus facile au plus difficile, avec des explications detaillees.
           </p>
-          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))" }}>
+          <div className="grid gap-3 cyberlab-tool-grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))" }}>
             {DOMAINS.map((d, i) => {
               const Icon = d.icon;
               return (
@@ -1334,7 +1334,7 @@ Le champ "correct" est l'index (0-3) de la bonne reponse dans le tableau "option
           </div>
 
           {/* Tools grid */}
-          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))" }}>
+          <div className="grid gap-3 cyberlab-tool-grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))" }}>
             {filteredTools.map((t, i) => {
               const domain = DOMAINS.find((d) => d.id === t.domain);
               return (
@@ -1393,7 +1393,7 @@ Le champ "correct" est l'index (0-3) de la bonne reponse dans le tableau "option
           <p className="text-sm mb-4" style={{ color: colors.muted, animation: "cl-fadeIn 0.4s ease" }}>
             Vis des scenarios reels etape par etape. Chaque simulation te plonge dans une situation concrete.
           </p>
-          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))" }}>
+          <div className="grid gap-4 cyberlab-sim-grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))" }}>
             {SIMULATIONS.map((sim, i) => {
               const Icon = sim.icon;
               return (

@@ -95,7 +95,7 @@ export function MembersView({ members, setMembers, allMembers }: MembersViewProp
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
         <div>
           <h1 style={{ color: colors.text, fontSize: "1.5rem", fontWeight: 800 }}>Membres</h1>
           <p style={{ color: colors.muted, fontSize: "0.8rem", marginTop: "4px" }}>
@@ -105,7 +105,7 @@ export function MembersView({ members, setMembers, allMembers }: MembersViewProp
         <Button onClick={() => { setModal(true); setEditId(null); setForm(emptyForm()); }}>+ Nouveau membre</Button>
       </div>
 
-      <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
+      <div className="filter-bar" style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
         <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher nom, compétence..."
           style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
         {[
@@ -200,15 +200,15 @@ export function MembersView({ members, setMembers, allMembers }: MembersViewProp
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <Field label="Nom complet" value={form.nom} onChange={(v) => setForm((f) => ({ ...f, nom: v }))} />
               <Field label="Trigramme" value={form.trigramme || ""} onChange={(v) => setForm((f) => ({ ...f, trigramme: v.toUpperCase() }))} placeholder="ex: RSI" />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <Field label="Email" type="email" value={form.email} onChange={(v) => setForm((f) => ({ ...f, email: v }))} />
               <Field label="LinkedIn" value={form.linkedin || ""} onChange={(v) => setForm((f) => ({ ...f, linkedin: v }))} placeholder="https://linkedin.com/in/..." />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <SelectField label="Rôle" value={form.role} onChange={(v) => setForm((f) => ({ ...f, role: v }))} options={[...ROLES_MEMBRE]} />
               <SelectField label="Niveau" value={form.niveau} onChange={(v) => setForm((f) => ({ ...f, niveau: v }))} options={[...NIVEAUX]} />
             </div>

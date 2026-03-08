@@ -19,9 +19,11 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
   font-family: var(--font-mono);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 ::-webkit-scrollbar {
@@ -47,6 +49,11 @@ select:focus {
   }
 }
 
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 /* ── Responsive ── */
 
 /* Mobile: < 768px */
@@ -58,14 +65,203 @@ select:focus {
     display: flex !important;
   }
   .main-content {
-    padding: 14px 12px 72px 12px !important;
+    padding: 14px 10px 80px 10px !important;
   }
   .grid-2col {
     grid-template-columns: 1fr !important;
   }
-  /* Stack buttons on mobile */
   h1 {
-    font-size: 1.2rem !important;
+    font-size: 1.15rem !important;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  /* Page headers - stack title and button */
+  .page-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+  .page-header > button,
+  .page-header > div:last-child > button {
+    align-self: flex-start;
+  }
+
+  /* Filter bars - wrap nicely */
+  .filter-bar {
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+  }
+  .filter-bar input {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+  }
+  .filter-bar button {
+    padding: 6px 10px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Form grids in modals - single column */
+  .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Card action buttons - wrap */
+  .card-actions {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Card rows - stack vertically */
+  .card-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+  .card-row .card-actions {
+    align-self: flex-start;
+  }
+
+  /* Badge rows - wrap */
+  .badge-row {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  /* Modals - full width, less padding */
+  .modal-body {
+    width: 96% !important;
+    max-width: 100% !important;
+    padding: 16px !important;
+    border-radius: 12px !important;
+    max-height: 92vh !important;
+  }
+  .modal-body h3 {
+    font-size: 0.9rem !important;
+  }
+
+  /* Floating chat - fullscreen on mobile */
+  .floating-chat-panel {
+    bottom: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    border: none !important;
+  }
+
+  /* FAB button - above bottom nav */
+  .floating-chat-fab {
+    bottom: 76px !important;
+    right: 14px !important;
+  }
+  .floating-chat-minimized {
+    bottom: 76px !important;
+    right: 14px !important;
+    width: 240px !important;
+  }
+
+  /* Chatbot full page */
+  .chatbot-container {
+    height: calc(100vh - 130px) !important;
+    max-height: calc(100vh - 130px) !important;
+  }
+  .chatbot-quick-questions {
+    max-width: 100% !important;
+    gap: 6px !important;
+  }
+  .chatbot-quick-questions button {
+    font-size: 0.65rem !important;
+    padding: 5px 10px !important;
+  }
+
+  /* Button touch targets */
+  button {
+    min-height: 36px;
+  }
+
+  /* CyberLab specific */
+  .cyberlab-domain-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .cyberlab-tool-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .cyberlab-sim-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .cyberlab-tabs {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+  .cyberlab-tabs button {
+    flex: 1 1 auto !important;
+    min-width: 80px !important;
+    font-size: 0.68rem !important;
+    padding: 8px 10px !important;
+  }
+  .cyberlab-domain-detail {
+    flex-direction: column !important;
+  }
+  .cyberlab-stats-row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  /* Convention / project card action wrapping */
+  .conv-actions {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  /* Mobile nav - horizontal scroll for many items */
+  .mobile-nav {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    justify-content: flex-start !important;
+    gap: 2px !important;
+    padding: 6px 4px env(safe-area-inset-bottom, 6px) 4px !important;
+  }
+  .mobile-nav button {
+    flex: 0 0 auto !important;
+    min-width: 52px !important;
+  }
+
+  /* Dashboard stats */
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+}
+
+/* Ultra-small mobile: < 400px */
+@media (max-width: 400px) {
+  .main-content {
+    padding: 10px 6px 80px 6px !important;
+  }
+  h1 {
+    font-size: 1rem !important;
+  }
+  .modal-body {
+    width: 100% !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    margin: 4px !important;
+  }
+  .mobile-nav button {
+    min-width: 46px !important;
+    padding: 4px 3px !important;
+  }
+  .mobile-nav button span {
+    font-size: 0.55rem !important;
   }
 }
 
@@ -77,6 +273,9 @@ select:focus {
   .main-content {
     padding: 20px 20px !important;
   }
+  .cyberlab-domain-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
 /* Desktop: > 1024px */
@@ -86,9 +285,18 @@ select:focus {
   }
 }
 
-/* Ultra-small mobile: < 400px */
-@media (max-width: 400px) {
-  .main-content {
-    padding: 10px 8px 72px 8px !important;
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Safe area for notched devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .mobile-nav {
+    padding-bottom: calc(6px + env(safe-area-inset-bottom)) !important;
   }
 }

@@ -155,6 +155,7 @@ export function FloatingChat({ members, partners, projects, conventions }: Float
   if (!open) {
     return (
       <button
+        className="floating-chat-fab"
         onClick={() => { setOpen(true); setMinimized(false); }}
         style={{
           position: "fixed", bottom: 24, right: 24, zIndex: 9000,
@@ -188,6 +189,7 @@ export function FloatingChat({ members, partners, projects, conventions }: Float
   if (minimized) {
     return (
       <div
+        className="floating-chat-minimized"
         onClick={() => setMinimized(false)}
         style={{
           position: "fixed", bottom: 24, right: 24, zIndex: 9000,
@@ -217,7 +219,7 @@ export function FloatingChat({ members, partners, projects, conventions }: Float
 
   // Full chat panel
   return (
-    <div style={{
+    <div className="floating-chat-panel" style={{
       position: "fixed", bottom: 24, right: 24, zIndex: 9000,
       width: 380, height: 520, maxHeight: "calc(100vh - 48px)",
       borderRadius: 16, overflow: "hidden",

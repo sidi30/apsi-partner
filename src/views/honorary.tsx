@@ -55,7 +55,7 @@ export function HonoraryView({ members, setMembers, allMembers }: HonoraryViewPr
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
         <div>
           <h1 style={{ color: colors.text, fontSize: "1.5rem", fontWeight: 800 }}>Membres d'honneur</h1>
           <p style={{ color: colors.muted, fontSize: "0.8rem", marginTop: "4px" }}>
@@ -65,7 +65,7 @@ export function HonoraryView({ members, setMembers, allMembers }: HonoraryViewPr
         <Button onClick={() => { setModal(true); setForm({ nom: "", bio: "", email: "" }); }}>+ Ajouter</Button>
       </div>
 
-      <div style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
+      <div className="filter-bar" style={{ display: "flex", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
         <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher..."
           style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.text, outline: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "0.8rem", flex: "1 1 140px", fontFamily: "inherit" }} />
       </div>

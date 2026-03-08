@@ -8,6 +8,7 @@ import {
   Award,
   MessageCircle,
   Shield,
+  Newspaper,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { config } from "@/lib/config";
@@ -21,6 +22,7 @@ const NAV = [
   { key: "honorary", icon: Award, label: "Membres d'honneur" },
   { key: "projects", icon: FolderKanban, label: "Projets" },
   { key: "conventions", icon: FileText, label: "Conventions" },
+  { key: "news", icon: Newspaper, label: "Actualités" },
   { key: "chatbot", icon: MessageCircle, label: "Assistant IA" },
   { key: "cyberlab", icon: Shield, label: "CyberLab" },
 ] as const;

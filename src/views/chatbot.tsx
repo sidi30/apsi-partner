@@ -158,9 +158,9 @@ export function ChatbotView({ members, partners, projects, conventions }: Chatbo
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 56px)", maxHeight: "calc(100vh - 56px)" }}>
+    <div className="chatbot-container" style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 56px)", maxHeight: "calc(100vh - 56px)" }}>
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px", flexShrink: 0 }}>
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px", flexShrink: 0 }}>
         <div>
           <h1 style={{ color: colors.text, fontSize: "1.5rem", fontWeight: 800 }}>Assistant APSI-NE</h1>
           <p style={{ color: colors.muted, fontSize: "0.8rem", marginTop: "4px" }}>
@@ -186,7 +186,7 @@ export function ChatbotView({ members, partners, projects, conventions }: Chatbo
                 Je réponds en me basant sur les documents du Drive via l'API Gwani. Je cite mes sources.
               </div>
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center", maxWidth: "500px" }}>
+            <div className="chatbot-quick-questions" style={{ display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center", maxWidth: "500px" }}>
               {quickQuestions.map((q) => (
                 <button key={q} onClick={() => { setInput(q); }}
                   style={{ background: colors.surface, border: `1px solid ${colors.border}`, color: colors.muted, padding: "6px 12px", borderRadius: "999px", fontSize: "0.7rem", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }}
