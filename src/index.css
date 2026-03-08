@@ -235,10 +235,23 @@ select:focus {
     min-width: 52px !important;
   }
 
-  /* Dashboard stats */
+  /* Dashboard stats - 4 cols → 2 cols on mobile */
   .dashboard-stats {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 8px !important;
+  }
+
+  /* News featured grid - stack */
+  .grid-2col[style*="2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  .grid-2col[style*="2fr 1fr"] > a:first-child {
+    grid-row: auto !important;
+  }
+
+  /* News 3-col grid */
+  .grid-2col[style*="repeat(3"] {
+    grid-template-columns: 1fr !important;
   }
 }
 

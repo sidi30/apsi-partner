@@ -172,6 +172,9 @@ export function NewsView() {
         ))}
       </div>
 
+      {/* ── Cyber Intelligence Dashboard ── */}
+      <CyberDashboard colors={colors} />
+
       {/* ── Filters ── */}
       <div className="filter-bar" style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
         {(Object.keys(CATEGORY_META) as CategoryFilter[]).map((cat) => {
@@ -377,6 +380,239 @@ function NewBadge({ colors }: { colors: Record<string, string> }) {
     }}>
       NEW
     </span>
+  );
+}
+
+/* ── Cyber Intelligence Dashboard ── */
+
+const THREAT_LANDSCAPE = [
+  { type: "Ransomware", pct: 32, trend: "+12%", icon: "🔐", desc: "LockBit, BlackCat, Cl0p dominent" },
+  { type: "Phishing / BEC", pct: 25, trend: "+8%", icon: "🎣", desc: "IA générative amplifie les campagnes" },
+  { type: "Supply Chain", pct: 15, trend: "+22%", icon: "🔗", desc: "Attaques via dépendances logicielles" },
+  { type: "Zero-Day", pct: 11, trend: "+18%", icon: "💥", desc: "Vulnérabilités exploitées avant patch" },
+  { type: "DDoS", pct: 9, trend: "+5%", icon: "🌊", desc: "Hacktivisme et extorsion" },
+  { type: "Insider Threat", pct: 8, trend: "-3%", icon: "👤", desc: "Menaces internes et négligence" },
+];
+
+const GLOBAL_STATS = [
+  { label: "Coût moyen ransomware", value: "$4.7M", sub: "par incident (2025)", color: "danger" },
+  { label: "Attaques/jour (monde)", value: "4 000+", sub: "tentatives quotidiennes", color: "warn" },
+  { label: "Temps moyen détection", value: "194j", sub: "avant identification breach", color: "blue" },
+  { label: "Pénurie cyber talents", value: "3.5M", sub: "postes non pourvus", color: "accent" },
+];
+
+const AFRICA_STATS = [
+  { label: "Pertes cybercrime Afrique", value: "$3.7Mds", sub: "estimation annuelle 2025", icon: "💰" },
+  { label: "Pays avec CERT national", value: "38/54", sub: "dont Niger (ANSI)", icon: "🏛️" },
+  { label: "Hausse attaques Afrique", value: "+23%", sub: "vs 2024 (INTERPOL)", icon: "📈" },
+  { label: "Mobile banking ciblé", value: "45%", sub: "des fraudes en Afrique de l'Ouest", icon: "📱" },
+];
+
+const SECTORS_TARGETED = [
+  { sector: "Finance / Banque", pct: 22, color: "#F59E0B" },
+  { sector: "Santé", pct: 18, color: "#EF4444" },
+  { sector: "Gouvernement", pct: 16, color: "#3B82F6" },
+  { sector: "Éducation", pct: 12, color: "#8B5CF6" },
+  { sector: "Énergie", pct: 10, color: "#10B981" },
+  { sector: "Télécoms", pct: 9, color: "#EC4899" },
+  { sector: "Industrie", pct: 8, color: "#6366F1" },
+  { sector: "Autre", pct: 5, color: "#94A3B8" },
+];
+
+function CyberDashboard({ colors }: { colors: Record<string, string> }) {
+  const [expanded, setExpanded] = useState(() => {
+    try { return localStorage.getItem("apsi_cyber_dash") !== "0"; } catch { return true; }
+  });
+  const toggle = () => {
+    const next = !expanded;
+    setExpanded(next);
+    localStorage.setItem("apsi_cyber_dash", next ? "1" : "0");
+  };
+
+  return (
+    <div style={{
+      background: colors.surface, border: `1px solid ${colors.border}`, borderRadius: "16px",
+      overflow: "hidden",
+    }}>
+      {/* Toggle header */}
+      <button
+        onClick={toggle}
+        style={{
+          width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "14px 20px", background: "transparent", border: "none", cursor: "pointer",
+          fontFamily: "inherit", color: colors.text,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "1.1rem" }}>&#x1F4CA;</span>
+          <span style={{ fontWeight: 800, fontSize: "0.9rem" }}>Tableau de bord Cyber Intelligence</span>
+          <span style={{
+            fontSize: "0.55rem", padding: "2px 8px", borderRadius: "999px", fontWeight: 700,
+            background: colors.accent + "18", color: colors.accent, border: `1px solid ${colors.accent}35`,
+          }}>LIVE 2025</span>
+        </div>
+        <span style={{ color: colors.muted, fontSize: "0.75rem", transition: "transform 0.2s", transform: expanded ? "rotate(180deg)" : "none" }}>
+          &#x25BC;
+        </span>
+      </button>
+
+      {expanded && (
+        <div style={{ padding: "0 20px 20px", display: "flex", flexDirection: "column", gap: "18px" }}>
+
+          {/* ── Row 1: Global stats ── */}
+          <div className="grid-2col dashboard-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
+            {GLOBAL_STATS.map((s) => (
+              <div key={s.label} style={{
+                background: colors.bg, borderRadius: "12px", padding: "14px 16px",
+                borderLeft: `3px solid ${(colors as Record<string, string>)[s.color]}`,
+              }}>
+                <div style={{ fontSize: "1.3rem", fontWeight: 900, color: (colors as Record<string, string>)[s.color] }}>{s.value}</div>
+                <div style={{ fontSize: "0.68rem", color: colors.text, fontWeight: 600, marginTop: "2px" }}>{s.label}</div>
+                <div style={{ fontSize: "0.58rem", color: colors.muted, marginTop: "2px" }}>{s.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── Row 2: Threat landscape + Sectors ── */}
+          <div className="grid-2col" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "14px" }}>
+            {/* Threat types ranking */}
+            <div style={{ background: colors.bg, borderRadius: "12px", padding: "16px" }}>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: colors.text, marginBottom: "14px", display: "flex", alignItems: "center", gap: "6px" }}>
+                <span>&#x1F3AF;</span> Classement des menaces 2025
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {THREAT_LANDSCAPE.map((t, i) => (
+                  <div key={t.type}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                      <span style={{ fontSize: "0.85rem", width: "20px", textAlign: "center" }}>{t.icon}</span>
+                      <span style={{ fontSize: "0.72rem", fontWeight: 700, color: colors.text, flex: 1 }}>
+                        <span style={{ color: colors.muted, fontWeight: 500, marginRight: "6px" }}>#{i + 1}</span>
+                        {t.type}
+                      </span>
+                      <span style={{ fontSize: "0.65rem", fontWeight: 700, color: colors.accent }}>{t.pct}%</span>
+                      <span style={{
+                        fontSize: "0.55rem", fontWeight: 700, padding: "1px 6px", borderRadius: "999px",
+                        background: t.trend.startsWith("+") ? colors.danger + "15" : colors.success + "15",
+                        color: t.trend.startsWith("+") ? colors.danger : colors.success,
+                      }}>{t.trend}</span>
+                    </div>
+                    {/* Bar */}
+                    <div style={{ marginLeft: "28px", display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div style={{ flex: 1, height: "6px", background: colors.border, borderRadius: "999px", overflow: "hidden" }}>
+                        <div style={{
+                          width: `${t.pct}%`, height: "100%", borderRadius: "999px",
+                          background: `linear-gradient(90deg, ${colors.accent}, ${colors.blue})`,
+                          transition: "width 0.8s ease",
+                        }} />
+                      </div>
+                      <span style={{ fontSize: "0.55rem", color: colors.muted, minWidth: "90px" }}>{t.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Sectors targeted */}
+            <div style={{ background: colors.bg, borderRadius: "12px", padding: "16px" }}>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: colors.text, marginBottom: "14px", display: "flex", alignItems: "center", gap: "6px" }}>
+                <span>&#x1F3E2;</span> Secteurs les plus ciblés
+              </div>
+              {/* Donut-style visual */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {SECTORS_TARGETED.map((s) => (
+                  <div key={s.sector} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div style={{
+                      width: "10px", height: "10px", borderRadius: "3px",
+                      background: s.color, flexShrink: 0,
+                    }} />
+                    <span style={{ fontSize: "0.7rem", color: colors.text, flex: 1, fontWeight: 500 }}>{s.sector}</span>
+                    <div style={{ width: "100px", height: "8px", background: colors.border, borderRadius: "999px", overflow: "hidden" }}>
+                      <div style={{
+                        width: `${(s.pct / 22) * 100}%`, height: "100%", borderRadius: "999px",
+                        background: s.color, transition: "width 0.8s ease",
+                      }} />
+                    </div>
+                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: s.color, minWidth: "30px", textAlign: "right" }}>{s.pct}%</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Highlight */}
+              <div style={{
+                marginTop: "14px", padding: "10px 12px", background: colors.danger + "10",
+                border: `1px solid ${colors.danger}25`, borderRadius: "10px",
+              }}>
+                <div style={{ fontSize: "0.62rem", color: colors.danger, fontWeight: 700, marginBottom: "3px" }}>
+                  &#x26A0; Alerte sectorielle
+                </div>
+                <div style={{ fontSize: "0.6rem", color: colors.muted, lineHeight: "1.5" }}>
+                  Le secteur financier reste la cible #1 avec une hausse de 35% des attaques sur les services bancaires mobiles en Afrique de l'Ouest.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Row 3: Africa Focus ── */}
+          <div style={{
+            background: `linear-gradient(135deg, ${colors.success}08, ${colors.bg})`,
+            border: `1px solid ${colors.success}25`, borderRadius: "12px", padding: "16px",
+          }}>
+            <div style={{ fontSize: "0.75rem", fontWeight: 800, color: colors.success, marginBottom: "14px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "1rem" }}>&#x1F30D;</span>
+              Focus Afrique — Cybersécurité 2025
+              <span style={{
+                fontSize: "0.5rem", padding: "2px 8px", borderRadius: "999px", fontWeight: 700,
+                background: colors.success + "18", color: colors.success,
+                marginLeft: "auto",
+              }}>
+                Source: INTERPOL / ITU / AfricaCERT
+              </span>
+            </div>
+            <div className="grid-2col dashboard-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
+              {AFRICA_STATS.map((s) => (
+                <div key={s.label} style={{
+                  background: colors.surface, borderRadius: "10px", padding: "14px",
+                  display: "flex", alignItems: "flex-start", gap: "10px",
+                }}>
+                  <span style={{ fontSize: "1.3rem" }}>{s.icon}</span>
+                  <div>
+                    <div style={{ fontSize: "1.1rem", fontWeight: 900, color: colors.success }}>{s.value}</div>
+                    <div style={{ fontSize: "0.65rem", color: colors.text, fontWeight: 600, marginTop: "2px" }}>{s.label}</div>
+                    <div style={{ fontSize: "0.55rem", color: colors.muted, marginTop: "2px" }}>{s.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Africa highlights */}
+            <div className="grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "12px" }}>
+              <div style={{ background: colors.surface, borderRadius: "10px", padding: "12px 14px" }}>
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, color: colors.warn, marginBottom: "6px" }}>
+                  &#x1F4A1; Tendances Afrique de l'Ouest
+                </div>
+                <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.6rem", color: colors.muted, lineHeight: "1.8" }}>
+                  <li>Fraude au <strong style={{ color: colors.text }}>mobile money</strong> en forte hausse (+45%)</li>
+                  <li>Campagnes de <strong style={{ color: colors.text }}>phishing SMS</strong> ciblant Orange Money, MTN</li>
+                  <li>Ransomware sur les <strong style={{ color: colors.text }}>institutions publiques</strong></li>
+                  <li>Manque de <strong style={{ color: colors.text }}>formation</strong> en réponse aux incidents</li>
+                </ul>
+              </div>
+              <div style={{ background: colors.surface, borderRadius: "10px", padding: "12px 14px" }}>
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, color: colors.blue, marginBottom: "6px" }}>
+                  &#x1F6E1; Initiatives régionales
+                </div>
+                <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.6rem", color: colors.muted, lineHeight: "1.8" }}>
+                  <li><strong style={{ color: colors.text }}>Convention de Malabo</strong> — cadre juridique UA</li>
+                  <li><strong style={{ color: colors.text }}>AfricaCERT</strong> — coordination CSIRT continentale</li>
+                  <li><strong style={{ color: colors.text }}>ANSI Niger</strong> — Agence Nationale de Sécurité Informatique</li>
+                  <li><strong style={{ color: colors.text }}>Cyber Africa Forum</strong> — Abidjan, événement annuel</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
