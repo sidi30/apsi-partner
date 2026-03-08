@@ -5,11 +5,35 @@ interface Message {
   content: string;
 }
 
+export interface GwaniCitation {
+  fileId?: string;
+  fileName?: string;
+  filePath?: string;
+  downloadUrl?: string;
+  pageStart?: number;
+  pageEnd?: number;
+  excerpt?: string;
+  relevanceScore?: number;
+}
+
+export interface GwaniResponse {
+  answer: string;
+  sources: string[];
+  citations: GwaniCitation[];
+  raw?: Record<string, unknown>;
+}
+
 /**
  * Appelle l'API Gwani (RAG sur le Drive APSI-NE).
  * Gwani a accès à tous les profils, projets, conventions et documents du Drive.
  */
 async function callGwani(prompt: string): Promise<string> {
+  const res = await callGwaniRaw(prompt);
+  return res.answer;
+}
+
+/** Gwani with full response (sources, citations) — used by chatbot */
+async function callGwaniRaw(prompt: string): Promise<GwaniResponse> {
   const res = await fetch(`${config.gwaniUrl}/chat`, {
     method: "POST",
     headers: {
@@ -29,13 +53,56 @@ async function callGwani(prompt: string): Promise<string> {
   }
 
   const data = await res.json();
-  return data.answer || data.response || data.message || JSON.stringify(data);
+  const answer = data.answer || data.response || data.message || JSON.stringify(data);
+
+  // Extract CitationDTO[] from response
+  const citations: GwaniCitation[] = [];
+  const rawCitations = data.citations || data.sources || data.documents || data.context || [];
+  if (Array.isArray(rawCitations)) {
+    for (const c of rawCitations) {
+      citations.push({
+        fileId: c.fileId || c.id,
+        fileName: c.fileName || c.name || c.title,
+        filePath: c.filePath || c.path,
+        downloadUrl: c.downloadUrl,
+        pageStart: c.pageStart,
+        pageEnd: c.pageEnd,
+        excerpt: c.excerpt || c.text || c.content,
+        relevanceScore: c.relevanceScore || c.score || c.relevance,
+      });
+    }
+  }
+
+  const sources = [...new Set(citations.map((c) => c.fileName || c.filePath || "").filter(Boolean))];
+
+  return { answer, sources, citations, raw: data };
+}
+
+/**
+ * Chat with Gwani — returns answer + sources. Falls back to OpenAI if Gwani fails.
+ * @param systemPrompt – optional rich context prompt for the OpenAI fallback
+ */
+export async function chatWithGwani(message: string, systemPrompt?: string): Promise<GwaniResponse> {
+  if (config.gwaniUrl && config.gwaniKey) {
+    try {
+      return await callGwaniRaw(message);
+    } catch (err) {
+      console.warn("[Gwani Chat] Erreur, fallback OpenAI:", err);
+    }
+  }
+
+  // Fallback to OpenAI with rich context
+  const answer = await callOpenAI(
+    [{ role: "user", content: message }],
+    systemPrompt,
+  );
+  return { answer, sources: [], citations: [] };
 }
 
 /**
  * Fallback OpenAI si Gwani n'est pas configuré ou échoue.
  */
-async function callOpenAI(messages: Message[]): Promise<string> {
+async function callOpenAI(messages: Message[], systemPrompt?: string): Promise<string> {
   if (!config.openaiKey) {
     return "[Erreur] Aucune API configurée. Vérifiez VITE_GWANI_API_KEY ou VITE_OPENAI_API_KEY dans .env";
   }
@@ -48,9 +115,9 @@ async function callOpenAI(messages: Message[]): Promise<string> {
     },
     body: JSON.stringify({
       model: config.openaiModel,
-      max_tokens: 1000,
+      max_tokens: 2000,
       messages: [
-        { role: "system", content: config.aiSystemPrompt },
+        { role: "system", content: systemPrompt || config.aiSystemPrompt },
         ...messages,
       ],
     }),

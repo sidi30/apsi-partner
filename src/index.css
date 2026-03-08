@@ -47,7 +47,9 @@ select:focus {
   }
 }
 
-/* Responsive */
+/* ── Responsive ── */
+
+/* Mobile: < 768px */
 @media (max-width: 768px) {
   .sidebar-desktop {
     display: none !important;
@@ -56,15 +58,37 @@ select:focus {
     display: flex !important;
   }
   .main-content {
-    padding: 16px !important;
+    padding: 14px 12px 72px 12px !important;
   }
   .grid-2col {
     grid-template-columns: 1fr !important;
   }
+  /* Stack buttons on mobile */
+  h1 {
+    font-size: 1.2rem !important;
+  }
 }
 
+/* Tablet: 769px - 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mobile-nav {
+    display: none !important;
+  }
+  .main-content {
+    padding: 20px 20px !important;
+  }
+}
+
+/* Desktop: > 1024px */
 @media (min-width: 769px) {
   .mobile-nav {
     display: none !important;
+  }
+}
+
+/* Ultra-small mobile: < 400px */
+@media (max-width: 400px) {
+  .main-content {
+    padding: 10px 8px 72px 8px !important;
   }
 }

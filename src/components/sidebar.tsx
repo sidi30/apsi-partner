@@ -6,10 +6,13 @@ import {
   FileText,
   Palette,
   Award,
+  MessageCircle,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { config } from "@/lib/config";
 import { useTheme, THEME_LABELS, type ThemeKey } from "@/hooks/use-theme";
+import logoApsi from "@/assets/logo-apsi.jpeg";
 
 const NAV = [
   { key: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -18,6 +21,8 @@ const NAV = [
   { key: "honorary", icon: Award, label: "Membres d'honneur" },
   { key: "projects", icon: FolderKanban, label: "Projets" },
   { key: "conventions", icon: FileText, label: "Conventions" },
+  { key: "chatbot", icon: MessageCircle, label: "Assistant IA" },
+  { key: "cyberlab", icon: Shield, label: "CyberLab" },
 ] as const;
 
 export type TabKey = (typeof NAV)[number]["key"];
@@ -43,20 +48,25 @@ export function Sidebar({ active, setActive, counts }: SidebarProps) {
     >
       {/* Logo */}
       <div
-        className="px-4 pt-5 pb-3.5"
+        className="px-4 pt-4 pb-3"
         style={{ borderBottom: `1px solid ${colors.border}` }}
       >
-        <div
-          className="font-extrabold text-lg tracking-[0.12em]"
-          style={{ color: colors.accent }}
-        >
-          {config.orgName}
-        </div>
-        <div
-          className="text-[0.58rem] tracking-[0.18em] mt-0.5"
-          style={{ color: colors.muted }}
-        >
-          PLATEFORME PARTENARIATS
+        <div className="flex items-center gap-2.5">
+          <img src={logoApsi} alt="APSI-NE" style={{ width: 36, height: 36, borderRadius: "8px", objectFit: "cover" }} />
+          <div>
+            <div
+              className="font-extrabold text-lg tracking-[0.12em]"
+              style={{ color: colors.accent }}
+            >
+              {config.orgName}
+            </div>
+            <div
+              className="text-[0.58rem] tracking-[0.18em] mt-0.5"
+              style={{ color: colors.muted }}
+            >
+              PLATEFORME PARTENARIATS
+            </div>
+          </div>
         </div>
       </div>
 

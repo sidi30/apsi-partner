@@ -11,10 +11,12 @@ import { MembersView } from "@/views/members";
 import { HonoraryView } from "@/views/honorary";
 import { ProjectsView } from "@/views/projects";
 import { ConventionsView } from "@/views/conventions";
+import { ChatbotView } from "@/views/chatbot";
+import { CyberLabView } from "@/views/cyberlab";
 
 export default function App() {
   const { colors } = useTheme();
-  const validTabs: TabKey[] = ["dashboard", "crm", "members", "honorary", "projects", "conventions"];
+  const validTabs: TabKey[] = ["dashboard", "crm", "members", "honorary", "projects", "conventions", "chatbot", "cyberlab"];
   const getTabFromHash = (): TabKey => {
     const hash = window.location.hash.replace("#", "");
     return validTabs.includes(hash as TabKey) ? (hash as TabKey) : "dashboard";
@@ -114,6 +116,12 @@ export default function App() {
         {tab === "conventions" && (
           <ConventionsView conventions={conventions} setConventions={setConventions} />
         )}
+        {tab === "chatbot" && (
+          <ChatbotView members={members} partners={partners} projects={projects} conventions={conventions} />
+        )}
+        {tab === "cyberlab" && (
+          <CyberLabView />
+        )}
       </main>
       {/* Mobile bottom nav */}
       <nav className="mobile-nav" style={{
@@ -128,6 +136,8 @@ export default function App() {
           { key: "honorary" as TabKey, label: "Honneur" },
           { key: "projects" as TabKey, label: "Projets" },
           { key: "conventions" as TabKey, label: "Conv." },
+          { key: "chatbot" as TabKey, label: "Chat IA" },
+          { key: "cyberlab" as TabKey, label: "CyberLab" },
         ].map((n) => (
           <button key={n.key} onClick={() => setTab(n.key)}
             style={{
