@@ -2,7 +2,8 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 
 export type ThemeKey = "dark" | "light" | "pro-blue";
 
-interface ThemeColors {
+export interface ThemeColors {
+  [key: string]: string;
   bg: string;
   surface: string;
   card: string;

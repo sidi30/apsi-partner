@@ -208,9 +208,6 @@ select:focus {
     font-size: 0.68rem !important;
     padding: 8px 10px !important;
   }
-  .cyberlab-domain-detail {
-    flex-direction: column !important;
-  }
   .cyberlab-stats-row {
     flex-wrap: wrap !important;
     gap: 6px !important;

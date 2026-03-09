@@ -5,7 +5,7 @@ import { callClaude } from "@/services/claude";
 import {
   Shield, Search, Bug, Lock, Eye, Server, FileCode, Scale,
   Terminal, ChevronRight, CheckCircle, XCircle, Award,
-  RotateCcw, Zap, Globe, Wifi, Loader,
+  RotateCcw, Zap, Globe, Loader,
   AlertTriangle, BookOpen, Target, Layers, ArrowRight,
   Clock, DollarSign, Cpu, Network, Smartphone,
   Brain, UserX, KeyRound, Radio, Flame,
@@ -1053,7 +1053,7 @@ Le champ "correct" est l'index (0-3) de la bonne reponse dans le tableau "option
           <p className="text-xs" style={{ color: colors.muted }}>
             Generation de 10 questions personnalisees du plus facile au plus difficile
           </p>
-          <div style={{ margin: "20px auto 0", width: 200, height: 4, background: colors.surface, borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ margin: "20px auto 0", width: "min(200px, 80%)", height: 4, background: colors.surface, borderRadius: 4, overflow: "hidden" }}>
             <div style={{
               height: "100%", width: "60%",
               background: `repeating-linear-gradient(90deg, ${colors.accent}, ${colors.accent} 30%, transparent 30%, transparent 100%)`,

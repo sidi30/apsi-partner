@@ -51,7 +51,7 @@ export function NewsView() {
   const [search, setSearch] = useState("");
   const [countdown, setCountdown] = useState("--:--");
   const [lastUpdate, setLastUpdate] = useState("");
-  const countdownRef = useRef<ReturnType<typeof setInterval>>();
+  const countdownRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
   // Countdown timer
   const updateCountdown = useCallback(() => {
@@ -362,7 +362,7 @@ function CategoryBadge({ category, colors }: { category: RSSArticle["category"];
   const m = meta[category] || meta.monde;
   return (
     <span style={{
-      fontSize: "0.55rem", padding: "2px 8px", borderRadius: "999px", fontWeight: 700,
+      fontSize: "0.62rem", padding: "2px 8px", borderRadius: "999px", fontWeight: 700,
       background: m.color + "18", color: m.color, border: `1px solid ${m.color}35`,
       textTransform: "uppercase", letterSpacing: "0.08em",
     }}>
@@ -447,7 +447,7 @@ function CyberDashboard({ colors }: { colors: Record<string, string> }) {
           <span style={{ fontSize: "1.1rem" }}>&#x1F4CA;</span>
           <span style={{ fontWeight: 800, fontSize: "0.9rem" }}>Tableau de bord Cyber Intelligence</span>
           <span style={{
-            fontSize: "0.55rem", padding: "2px 8px", borderRadius: "999px", fontWeight: 700,
+            fontSize: "0.62rem", padding: "2px 8px", borderRadius: "999px", fontWeight: 700,
             background: colors.accent + "18", color: colors.accent, border: `1px solid ${colors.accent}35`,
           }}>LIVE 2025</span>
         </div>
@@ -491,7 +491,7 @@ function CyberDashboard({ colors }: { colors: Record<string, string> }) {
                       </span>
                       <span style={{ fontSize: "0.65rem", fontWeight: 700, color: colors.accent }}>{t.pct}%</span>
                       <span style={{
-                        fontSize: "0.55rem", fontWeight: 700, padding: "1px 6px", borderRadius: "999px",
+                        fontSize: "0.62rem", fontWeight: 700, padding: "1px 6px", borderRadius: "999px",
                         background: t.trend.startsWith("+") ? colors.danger + "15" : colors.success + "15",
                         color: t.trend.startsWith("+") ? colors.danger : colors.success,
                       }}>{t.trend}</span>
@@ -505,7 +505,7 @@ function CyberDashboard({ colors }: { colors: Record<string, string> }) {
                           transition: "width 0.8s ease",
                         }} />
                       </div>
-                      <span style={{ fontSize: "0.55rem", color: colors.muted, minWidth: "90px" }}>{t.desc}</span>
+                      <span style={{ fontSize: "0.62rem", color: colors.muted, minWidth: "90px" }}>{t.desc}</span>
                     </div>
                   </div>
                 ))}
@@ -578,7 +578,7 @@ function CyberDashboard({ colors }: { colors: Record<string, string> }) {
                   <div>
                     <div style={{ fontSize: "1.1rem", fontWeight: 900, color: colors.success }}>{s.value}</div>
                     <div style={{ fontSize: "0.65rem", color: colors.text, fontWeight: 600, marginTop: "2px" }}>{s.label}</div>
-                    <div style={{ fontSize: "0.55rem", color: colors.muted, marginTop: "2px" }}>{s.sub}</div>
+                    <div style={{ fontSize: "0.62rem", color: colors.muted, marginTop: "2px" }}>{s.sub}</div>
                   </div>
                 </div>
               ))}
@@ -668,7 +668,7 @@ function ArticleCard({
         <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
           <CategoryBadge category={article.category} colors={colors} />
           {article.isNew && <NewBadge colors={colors} />}
-          <span style={{ fontSize: "0.55rem", color: colors.muted, marginLeft: "auto" }}>
+          <span style={{ fontSize: "0.62rem", color: colors.muted, marginLeft: "auto" }}>
             {timeAgo(article.pubDate)}
           </span>
         </div>

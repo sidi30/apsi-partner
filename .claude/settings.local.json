@@ -16,7 +16,14 @@
       "Bash(node:*)",
       "Bash(echo === FILE $fid ===:*)",
       "Bash(echo === $fid ===:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(ssh:*)",
+      "Bash(tar:*)",
+      "Bash(scp:*)",
+      "Bash(ipconfig:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(npx vite:*)",
+      "Bash(grep:*)"
     ]
   }
 }

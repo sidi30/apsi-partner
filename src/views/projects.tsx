@@ -174,7 +174,7 @@ Sois précis et concis.`,
                   </div>
                   <p style={{ color: colors.muted, fontSize: "0.8rem", lineHeight: "1.5", margin: "4px 0" }}>{proj.description}</p>
                 </div>
-                {proj.deadline && <span style={{ color: colors.muted, fontSize: "0.72rem", marginLeft: "12px", whiteSpace: "nowrap" }}>{proj.deadline}</span>}
+                {proj.deadline && <span style={{ color: colors.muted, fontSize: "0.72rem", marginLeft: "12px" }}>{proj.deadline}</span>}
               </div>
 
               {projMembers.length > 0 && (

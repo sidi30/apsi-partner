@@ -151,13 +151,13 @@ export default function App() {
             style={{
               background: "none", border: "none", cursor: "pointer",
               color: tab === n.key ? colors.accent : colors.muted,
-              fontSize: "0.6rem", fontWeight: tab === n.key ? 700 : 500,
+              fontSize: "0.65rem", fontWeight: tab === n.key ? 700 : 500,
               fontFamily: "inherit", display: "flex", flexDirection: "column",
               alignItems: "center", gap: "2px", padding: "4px 8px",
             }}>
-            <span style={{ fontSize: "0.7rem" }}>{n.label}</span>
+            <span style={{ fontSize: "0.68rem" }}>{n.label}</span>
             {(counts?.[n.key] ?? 0) > 0 && (
-              <span style={{ fontSize: "0.55rem", color: colors.accent }}>{counts[n.key]}</span>
+              <span style={{ fontSize: "0.62rem", color: colors.accent }}>{counts[n.key]}</span>
             )}
           </button>
         ))}

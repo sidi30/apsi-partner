@@ -193,7 +193,7 @@ export function FloatingChat({ members, partners, projects, conventions }: Float
         onClick={() => setMinimized(false)}
         style={{
           position: "fixed", bottom: 24, right: 24, zIndex: 9000,
-          width: 280, padding: "10px 16px", borderRadius: 12,
+          width: "min(280px, calc(100vw - 32px))", padding: "10px 16px", borderRadius: 12,
           background: colors.surface, border: `1px solid ${colors.border}`,
           cursor: "pointer", display: "flex", alignItems: "center", gap: 10,
           boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
@@ -221,7 +221,7 @@ export function FloatingChat({ members, partners, projects, conventions }: Float
   return (
     <div className="floating-chat-panel" style={{
       position: "fixed", bottom: 24, right: 24, zIndex: 9000,
-      width: 380, height: 520, maxHeight: "calc(100vh - 48px)",
+      width: "min(380px, calc(100vw - 24px))", height: 520, maxHeight: "calc(100vh - 48px)",
       borderRadius: 16, overflow: "hidden",
       background: colors.bg, border: `1px solid ${colors.border}`,
       boxShadow: "0 12px 48px rgba(0,0,0,0.4)",

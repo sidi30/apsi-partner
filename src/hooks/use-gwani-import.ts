@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { config } from "@/lib/config";
+
 import type { Member, Partner, Project, Convention } from "@/data/types";
 import {
   alreadyImported,
@@ -88,6 +88,5 @@ export function useGwaniImport(
   return state;
 }
 
-function delay(ms: number) {
-  return new Promise((r) => setTimeout(r, ms));
-}
+// @ts-ignore -- kept for future use
+// function delay(ms: number) { return new Promise((r) => setTimeout(r, ms)); }

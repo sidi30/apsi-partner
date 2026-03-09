@@ -321,7 +321,7 @@ export function ConventionsView({ conventions, setConventions }: ConventionsView
     const otherConvs = conventions.filter(c => c.id !== conv.id && c.contenu);
     if (otherConvs.length > 0) {
       existingContext = `\n\nConventions existantes de ${config.orgName} pour comparaison :\n` +
-        otherConvs.slice(0, 2).map((c, i) => `--- ${c.titre} (${c.statut}) ---\nPartenaire: ${c.partenaire}\nObjet: ${c.objet}\nDurée: ${c.duree}\nExtrait: ${c.contenu.slice(0, 800)}`).join("\n\n");
+        otherConvs.slice(0, 2).map((c) => `--- ${c.titre} (${c.statut}) ---\nPartenaire: ${c.partenaire}\nObjet: ${c.objet}\nDurée: ${c.duree}\nExtrait: ${c.contenu.slice(0, 800)}`).join("\n\n");
     }
 
     let gwaniContext = "";

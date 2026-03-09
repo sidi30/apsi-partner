@@ -48,7 +48,7 @@ export function Button({
         fontWeight: 600,
         letterSpacing: "0.02em",
         borderRadius: "8px",
-        padding: small ? "4px 12px" : "8px 16px",
+        padding: small ? "6px 12px" : "8px 16px",
         fontSize: small ? "0.72rem" : "0.82rem",
         cursor: disabled || loading ? "not-allowed" : "pointer",
         opacity: disabled || loading ? 0.45 : 1,
